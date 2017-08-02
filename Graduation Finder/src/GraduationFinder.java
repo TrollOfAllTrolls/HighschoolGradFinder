@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class GraduationFinder {
 
@@ -6,7 +8,7 @@ public class GraduationFinder {
 		Student[] students = { new Student("Adams", "Kyran", 2, 2009, 4), new Student("Faizi", "Kian", 2, 2009, 4),
 				new Student("Gompf", "Neil", 10, 2009, 4), new Student("Zeng", "Stanton", 6, 2009, 4),
 				new Student("Oviedo", "Daniel", 3, 2013, 4), new Student("Rosenbaum", "Maya", 8, 2013, 4),
-				new Student("Rooney", "Kellen", 4, 2014, 4), new Student("Mahoney", "Michael", 12, 2014, 1),
+				new Student("Rooney", "Kellen", 4, 2014, 4), new Student("Mahoney", "Michael", 12, 2014, 4),
 				new Student("Cooper", "Ella", 1, 2015, 4), new Student("Gupta", "Arnav", 11, 2015, 4),
 				new Student("McStravick", "Lochland", 11, 2015, 4), new Student("Shiah", "Eli", 8, 2015, 4),
 				new Student("Morrin", "Cody", 7, 2009, 5), new Student("Fullepp", "Markopolo", 8, 2010, 5),
@@ -101,34 +103,47 @@ public class GraduationFinder {
 				new Student("Enriquez", "Pedro", 8, 2009, 100), new Student("Weiser", "Daniel", 12, 2011, 10),
 				new Student("Bayley", "Charles", 7, 2012, 100), new Student("Ainsworth", "Mary", 4, 2014, 9),
 				new Student("Rajgopal", "Nandini", 7, 2014, 4) };
-		
+
 		gradFind.calculate(students);
 	}
 
 	public void calculate(Student[] students) {
-		int tempYear;
-		int tempGrade;
-		for (int i = 0; i < students.length; i++) {
-			tempYear = students[i].getYStart();
-			tempGrade = students[i].getGrade();
-			if (students[i].getMStart() > 6) {
-				tempYear++;
-			}
-			while (tempGrade < 12) {
-				tempYear++;
-				tempGrade++;
-			}
+		try {
+			PrintWriter writer = new PrintWriter("HighschoolGradDatesSimple.txt", "UTF-8");
+			int tempYear;
+			int tempGrade;
 
-			if (tempYear <= 2017 && tempGrade < 100) {
-				System.out.println("[" + students[i].getLName() + ", " + students[i].getFName()
-						+ "] graduated highschool in [" + tempYear + "].");
-			} else if (tempGrade < 100) {
-				System.out.println("[" + students[i].getLName() + ", " + students[i].getFName()
-						+ "] will graduate highschool in [" + tempYear + "].");
-			} else {
-				System.out.println("[" + students[i].getLName() + ", " + students[i].getFName()
-						+ "] was out of highschool when he signed up.");
+			for (int i = 0; i < students.length; i++) {
+				tempYear = students[i].getYStart();
+				tempGrade = students[i].getGrade();
+				if (students[i].getMStart() > 6) {
+					tempYear++;
+				}
+				while (tempGrade < 12) {
+					tempYear++;
+					tempGrade++;
+				}
+
+				if (tempYear <= 2017 && tempGrade < 100) {
+					System.out.println("[" + students[i].getLName() + ", " + students[i].getFName()
+							+ "] graduated highschool in [" + tempYear + "].");
+					writer.println(students[i].getLName() + ", " + students[i].getFName()
+							+ ", " + tempYear);
+				} else if (tempGrade < 100) {
+					System.out.println("[" + students[i].getLName() + ", " + students[i].getFName()
+							+ "] will graduate highschool in [" + tempYear +"].");
+					writer.println(students[i].getLName() + ", " + students[i].getFName()
+							+ ", " + tempYear);
+				} else {
+					System.out.println("[" + students[i].getLName() + ", " + students[i].getFName()
+							+ "] was out of highschool when he signed up.");
+					writer.println(students[i].getLName() + ", " + students[i].getFName()
+							+ ", already graduated");
+				}
 			}
+			writer.close();
+		} catch (IOException e) {
+			System.out.println("Error: " + e);
 		}
 	}
 }
